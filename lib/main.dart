@@ -4,11 +4,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:get_it/get_it.dart';
+import 'package:stock_control_app/core/database/configuration.dart';
 import 'package:stock_control_app/core/extensions/string.dart';
 
 import 'package:stock_control_app/core/navigation/pages.dart';
 import 'package:stock_control_app/core/network/session.dart';
 import 'package:stock_control_app/core/session/session_storage.dart';
+import 'package:stock_control_app/core/sync/sync_service.dart';
+import 'package:stock_control_app/features/outlets/presentation/routes.dart';
 import 'package:stock_control_app/features/route/presentation/pages/today_route_page.dart';
 import 'package:stock_control_app/features/route/presentation/routes.dart';
 import 'package:stock_control_app/init.dart';
@@ -19,8 +22,11 @@ Future<void> main() async {
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
   await initializeAllDependencies();
+  await DatabaseHandler.init(); // must run before SyncService.start()
   await SessionStorage.restore();
   await ScreenUtil.ensureScreenSize();
+
+  SyncService().start();
 
   runApp(const ProviderScope(child: StockControlApp()));
 }
@@ -52,6 +58,7 @@ class _StockControlAppState extends ConsumerState<StockControlApp> {
       routes: [
         ...authenticationRoutes,
         ...routeFeatureRoutes,
+        ...outletFeatureRoutes,
         GoRoute(
           path: Pages.home.path,
           builder: (context, state) => const TodayRoutePage(),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:stock_control_app/features/route/presentation/provider/route_provider.dart';
 import 'package:stock_control_app/features/route/presentation/functions/load_route.dart';
 
@@ -41,9 +42,10 @@ class _TodayRoutePageState extends ConsumerState<TodayRoutePage> {
                       leading: CircleAvatar(child: Text("${stop.sequence}")),
                       title: Text(stop.outletName),
                       subtitle: Text(stop.address),
-                      onTap: () {
-                        // TODO: navigate to Outlet Detail once features/outlets is built
-                      },
+                      onTap: () => context.push(
+                        '/outlet-detail',
+                        extra: stop,
+                      ),
                     ),
                   );
                 },

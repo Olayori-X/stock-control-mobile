@@ -1,0 +1,1 @@
+enum PendingActionType { outletVisit, sale }
