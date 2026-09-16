@@ -17,10 +17,14 @@ import 'package:stock_control_app/features/route/data/datasources/get_route_plan
 import 'package:stock_control_app/features/route/data/repositories/get_route_plan_repository_impl.dart';
 import 'package:stock_control_app/features/route/domain/repositories/get_route_plan_repository.dart';
 import 'package:stock_control_app/features/route/domain/usecases/get_route_plan_use_case.dart';
+import 'package:stock_control_app/features/sales/data/datasources/get_my_sales_datasource.dart';
 import 'package:stock_control_app/features/sales/data/datasources/submit_sale_datasource.dart';
+import 'package:stock_control_app/features/sales/data/repositories/get_my_sales_repository_impl.dart';
 import 'package:stock_control_app/features/sales/data/repositories/submit_sale_repository_impl.dart';
 import 'package:stock_control_app/features/sales/data/sync/sale_sync_handler.dart';
+import 'package:stock_control_app/features/sales/domain/repositories/get_my_sales_repository.dart';
 import 'package:stock_control_app/features/sales/domain/repositories/submit_sale_repository.dart';
+import 'package:stock_control_app/features/sales/domain/usecases/get_my_sales_use_case.dart';
 import 'package:stock_control_app/features/sales/domain/usecases/submit_sale_use_case.dart';
 
 final GetIt serviceLocator = GetIt.I;
@@ -132,6 +136,10 @@ void initSaleDependencies(){
     () => SubmitSaleRemoteDataSource(),
   );
 
+  serviceLocator.registerFactory<GetMySalesDataSource>(
+    () => GetMySalesRemoteDataSource(),
+  );
+
   //REPOSITORIES
   serviceLocator.registerFactory<SubmitSaleRepository>(
     () => SubmitSaleRepositoryImpl(
@@ -140,9 +148,17 @@ void initSaleDependencies(){
     ),
   );
 
+  serviceLocator.registerFactory<GetMySalesRepository>(
+    () => GetMySalesRepositoryImpl(dataSource: serviceLocator()),
+  );
+
   //USECASES
   serviceLocator.registerFactory(
     () => SubmitSaleUseCase(repository: serviceLocator()),
+  );
+
+  serviceLocator.registerFactory(
+    () => GetMySalesUseCase(repository: serviceLocator()),
   );
 
   // Registers this feature's sync handler into the generic queue, keyed by

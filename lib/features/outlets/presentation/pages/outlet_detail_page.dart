@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:stock_control_app/features/route/domain/repositories/get_route_plan_repository.dart';
 import 'package:stock_control_app/features/outlets/presentation/provider/outlet_visit_provider.dart';
 import 'package:stock_control_app/features/outlets/presentation/functions/confirm_visit.dart';
+import 'package:stock_control_app/features/sales/presentation/pages/sales_capture_page.dart';
 
 class OutletDetailPage extends ConsumerWidget {
   final RoutePlanStop stop;
@@ -16,6 +17,11 @@ class OutletDetailPage extends ConsumerWidget {
     final result = ref.watch(confirmVisitResultProvider);
     final errorMessage = ref.watch(confirmVisitErrorMessageProvider);
     final isLoading = state == AppState.loading;
+
+    final canLogSale = state == AppState.success &&
+        result != null &&
+        !result.queued &&
+        result.geofenceStatus == "PASS";
 
     return Scaffold(
       appBar: AppBar(title: Text(stop.outletName)),
@@ -59,6 +65,21 @@ class OutletDetailPage extends ConsumerWidget {
                   ? const SizedBox(height: 18, width: 18, child: CircularProgressIndicator(strokeWidth: 2))
                   : const Text("Confirm visit"),
             ),
+            if (canLogSale) ...[
+              const SizedBox(height: 12),
+              OutlinedButton(
+                onPressed: () => Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (_) => SalesCapturePage(
+                      outletId: stop.outletId,
+                      outletName: stop.outletName,
+                      routeDay: routeDay,
+                    ),
+                  ),
+                ),
+                child: const Text("Log a sale"),
+              ),
+            ],
           ],
         ),
       ),
