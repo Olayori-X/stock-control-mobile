@@ -12,4 +12,6 @@ class Pages {
 
   static String get pickupRequest => "pickup-request";
   static String get invoices => "invoices";
+
+  static String get createOutlet => "create-outlet";
 }

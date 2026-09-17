@@ -10,10 +10,14 @@ import 'package:stock_control_app/features/auth/data/repositories/pin_login_repo
 import 'package:stock_control_app/features/auth/domain/repositories/pin_login_repository.dart';
 import 'package:stock_control_app/features/auth/domain/usecases/pin_login_use_case.dart';
 import 'package:stock_control_app/features/outlets/data/datasources/confirm_outlet_visit_datasource.dart';
+import 'package:stock_control_app/features/outlets/data/datasources/create_my_outlet_datasource.dart';
 import 'package:stock_control_app/features/outlets/data/repositories/confirm_outlet_visit_repository_impl.dart';
+import 'package:stock_control_app/features/outlets/data/repositories/create_my_outlet_repository_impl.dart';
 import 'package:stock_control_app/features/outlets/data/sync/outlet_visit_sync_handler.dart';
 import 'package:stock_control_app/features/outlets/domain/repositories/confirm_outlet_visit_repository.dart';
+import 'package:stock_control_app/features/outlets/domain/repositories/create_my_outlet_repository.dart';
 import 'package:stock_control_app/features/outlets/domain/usecases/confirm_outlet_visit_use_case.dart';
+import 'package:stock_control_app/features/outlets/domain/usecases/create_my_outlet_use_case.dart';
 import 'package:stock_control_app/features/route/data/datasources/get_route_plan_datasource.dart';
 import 'package:stock_control_app/features/route/data/repositories/get_route_plan_repository_impl.dart';
 import 'package:stock_control_app/features/route/domain/repositories/get_route_plan_repository.dart';
@@ -27,6 +31,11 @@ import 'package:stock_control_app/features/sales/domain/repositories/get_my_sale
 import 'package:stock_control_app/features/sales/domain/repositories/submit_sale_repository.dart';
 import 'package:stock_control_app/features/sales/domain/usecases/get_my_sales_use_case.dart';
 import 'package:stock_control_app/features/sales/domain/usecases/submit_sale_use_case.dart';
+import 'package:stock_control_app/features/scs/invoices/data/datasources/invoices_datasource.dart';
+import 'package:stock_control_app/features/scs/invoices/data/repositories/invoices_repository_impl.dart';
+import 'package:stock_control_app/features/scs/invoices/domain/repositories/invoices_repository.dart';
+import 'package:stock_control_app/features/scs/invoices/domain/usecases/get_my_invoices_use_case.dart';
+import 'package:stock_control_app/features/scs/invoices/domain/usecases/get_my_receipts_use_case.dart';
 import 'package:stock_control_app/features/scs/pickup/data/datasources/pickup_request_datasource.dart';
 import 'package:stock_control_app/features/scs/pickup/data/repositories/create_pickup_request_repository_impl.dart';
 import 'package:stock_control_app/features/scs/pickup/data/repositories/get_products_repository_impl.dart';
@@ -49,11 +58,6 @@ Future<void> initializeAllDependencies() async {
   initPickupDependencies();
 }
 
-// Everything registered here is a true cross-feature singleton — each
-// must be registered exactly ONCE for the whole app's lifetime.
-// GetIt.registerLazySingleton throws if you call it twice for the same
-// type without unregistering first, which is exactly what was happening
-// before this was pulled out of each init*Dependencies function.
 void initSharedDependencies() {
   serviceLocator.registerLazySingleton(() => AppTokens());
   serviceLocator.registerLazySingleton<UserCredentials>(
@@ -100,10 +104,16 @@ void initRouteDependencies() {
 }
 
 void initOutletDependencies() {
+  //DATASOURCE
   serviceLocator.registerFactory<ConfirmOutletVisitDataSource>(
     () => ConfirmOutletVisitRemoteDataSource(),
   );
 
+  serviceLocator.registerFactory<CreateMyOutletDataSource>(
+    () => CreateMyOutletRemoteDataSource(),
+  );
+
+  //REPOSITORIES
   serviceLocator.registerFactory<ConfirmOutletVisitRepository>(
     () => ConfirmOutletVisitRepositoryImpl(
       dataSource: serviceLocator(),
@@ -111,13 +121,18 @@ void initOutletDependencies() {
     ),
   );
 
+  serviceLocator.registerFactory<CreateMyOutletRepository>(
+    () => CreateMyOutletRepositoryImpl(dataSource: serviceLocator()),
+  );
+
   serviceLocator.registerFactory(
     () => ConfirmOutletVisitUseCase(repository: serviceLocator()),
   );
 
-  // Registers this feature's sync handler into the generic queue, keyed by
-  // type — this is what lets SyncService call it without core/ ever
-  // importing features/outlets directly.
+  serviceLocator.registerFactory(
+    () => CreateMyOutletUseCase(repository: serviceLocator()),
+  );
+
   serviceLocator.registerFactory<SyncHandler>(
     () => OutletVisitSyncHandler(),
     instanceName: PendingActionType.outletVisit.name,
@@ -192,5 +207,23 @@ void initPickupDependencies() {
   );
   serviceLocator.registerFactory(
     () => GetProductsUseCase(repository: serviceLocator()),
+  );
+}
+
+
+void initInvoicesDependencies() {
+  serviceLocator.registerFactory<InvoicesDataSource>(
+    () => InvoicesRemoteDataSource(),
+  );
+
+  serviceLocator.registerFactory<InvoicesRepository>(
+    () => InvoicesRepositoryImpl(dataSource: serviceLocator()),
+  );
+
+  serviceLocator.registerFactory(
+    () => GetMyInvoicesUseCase(repository: serviceLocator()),
+  );
+  serviceLocator.registerFactory(
+    () => GetMyReceiptsUseCase(repository: serviceLocator()),
   );
 }

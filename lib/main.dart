@@ -11,8 +11,8 @@ import 'package:stock_control_app/core/navigation/pages.dart';
 import 'package:stock_control_app/core/network/session.dart';
 import 'package:stock_control_app/core/session/session_storage.dart';
 import 'package:stock_control_app/core/sync/sync_service.dart';
+import 'package:stock_control_app/features/dashboard/presentation/pages/dashboard_home_page.dart';
 import 'package:stock_control_app/features/outlets/presentation/routes.dart';
-import 'package:stock_control_app/features/route/presentation/pages/today_route_page.dart';
 import 'package:stock_control_app/features/route/presentation/routes.dart';
 import 'package:stock_control_app/features/sales/presentation/routes.dart';
 import 'package:stock_control_app/features/scs/invoices/presentation/routes.dart';
@@ -69,7 +69,7 @@ class _StockControlAppState extends ConsumerState<StockControlApp> {
         ...invoicesFeatureRoutes,
         GoRoute(
           path: Pages.home.path,
-          builder: (context, state) => const TodayRoutePage(),
+          builder: (context, state) => const DashboardHomePage(), // was TodayRoutePage
         ),
       ],
     );
