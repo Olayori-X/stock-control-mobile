@@ -15,6 +15,7 @@ import 'package:stock_control_app/features/outlets/presentation/routes.dart';
 import 'package:stock_control_app/features/route/presentation/pages/today_route_page.dart';
 import 'package:stock_control_app/features/route/presentation/routes.dart';
 import 'package:stock_control_app/features/sales/presentation/routes.dart';
+import 'package:stock_control_app/features/sync_status/presentation/routes.dart';
 import 'package:stock_control_app/init.dart';
 import 'package:stock_control_app/features/auth/presentation/routes.dart';
 
@@ -27,7 +28,7 @@ Future<void> main() async {
   await SessionStorage.restore();
   await ScreenUtil.ensureScreenSize();
 
-  SyncService().start();
+  GetIt.I<SyncService>().start(); // was: SyncService().start() — must reuse the registered singleton, not a fresh instance
 
   runApp(const ProviderScope(child: StockControlApp()));
 }
@@ -61,6 +62,7 @@ class _StockControlAppState extends ConsumerState<StockControlApp> {
         ...routeFeatureRoutes,
         ...outletFeatureRoutes,
         ...salesFeatureRoutes,
+        ...syncStatusFeatureRoutes,
         GoRoute(
           path: Pages.home.path,
           builder: (context, state) => const TodayRoutePage(),

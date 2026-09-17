@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:stock_control_app/core/sync/pending_action_type.dart';
 import 'package:stock_control_app/core/sync/sync_handler.dart';
 import 'package:stock_control_app/core/sync/sync_queue_repository.dart';
+import 'package:stock_control_app/core/sync/sync_service.dart';
 import 'package:stock_control_app/features/auth/data/datasources/pin_login_datasource.dart';
 import 'package:stock_control_app/features/auth/data/repositories/pin_login_repository_impl.dart';
 import 'package:stock_control_app/features/auth/domain/repositories/pin_login_repository.dart';
@@ -30,22 +31,31 @@ import 'package:stock_control_app/features/sales/domain/usecases/submit_sale_use
 final GetIt serviceLocator = GetIt.I;
 
 Future<void> initializeAllDependencies() async {
+  initSharedDependencies(); // must run first — every feature below relies on these
   initAuthenticationDependencies();
   initRouteDependencies();
   initOutletDependencies();
   initSaleDependencies();
 }
 
-
-void initAuthenticationDependencies(){
+// Everything registered here is a true cross-feature singleton — each
+// must be registered exactly ONCE for the whole app's lifetime.
+// GetIt.registerLazySingleton throws if you call it twice for the same
+// type without unregistering first, which is exactly what was happening
+// before this was pulled out of each init*Dependencies function.
+void initSharedDependencies() {
   serviceLocator.registerLazySingleton(() => AppTokens());
   serviceLocator.registerLazySingleton<UserCredentials>(
     () => UserCredentials(),
   );
   serviceLocator.registerLazySingleton<UserLocation>(() => UserLocation());
   serviceLocator.registerLazySingleton(() => SalesSession());
+  serviceLocator.registerLazySingleton(() => SyncQueueRepository());
+  serviceLocator.registerLazySingleton(() => SyncService());
+}
 
-  //DATASOURCE  
+void initAuthenticationDependencies() {
+  //DATASOURCE
   serviceLocator.registerFactory<PinLoginDataSource>(
     () => PinLoginRemoteDataSource(),
   );
@@ -61,16 +71,8 @@ void initAuthenticationDependencies(){
   );
 }
 
-
-void initRouteDependencies(){
-  serviceLocator.registerLazySingleton(() => AppTokens());
-  serviceLocator.registerLazySingleton<UserCredentials>(
-    () => UserCredentials(),
-  );
-  serviceLocator.registerLazySingleton<UserLocation>(() => UserLocation());
-  serviceLocator.registerLazySingleton(() => SalesSession());
-
-  //DATASOURCE  
+void initRouteDependencies() {
+  //DATASOURCE
   serviceLocator.registerFactory<GetRoutePlanDataSource>(
     () => GetRoutePlanRemoteDataSource(),
   );
@@ -86,17 +88,7 @@ void initRouteDependencies(){
   );
 }
 
-
-void initOutletDependencies(){
-  serviceLocator.registerLazySingleton(() => AppTokens());
-  serviceLocator.registerLazySingleton<UserCredentials>(
-    () => UserCredentials(),
-  );
-  serviceLocator.registerLazySingleton<UserLocation>(() => UserLocation());
-  serviceLocator.registerLazySingleton(() => SalesSession());
-
-  serviceLocator.registerLazySingleton(() => SyncQueueRepository());
-
+void initOutletDependencies() {
   serviceLocator.registerFactory<ConfirmOutletVisitDataSource>(
     () => ConfirmOutletVisitRemoteDataSource(),
   );
@@ -121,17 +113,8 @@ void initOutletDependencies(){
   );
 }
 
-void initSaleDependencies(){
-  serviceLocator.registerLazySingleton(() => AppTokens());
-  serviceLocator.registerLazySingleton<UserCredentials>(
-    () => UserCredentials(),
-  );
-  serviceLocator.registerLazySingleton<UserLocation>(() => UserLocation());
-  serviceLocator.registerLazySingleton(() => SalesSession());
-
-  serviceLocator.registerLazySingleton(() => SyncQueueRepository());
-
-  //DATASOURCE  
+void initSaleDependencies() {
+  //DATASOURCE
   serviceLocator.registerFactory<SubmitSaleDataSource>(
     () => SubmitSaleRemoteDataSource(),
   );

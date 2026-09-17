@@ -7,4 +7,6 @@ class Pages {
   static String get mySales => "my-sales";
 
   static String get salesCapture => "sales-capture";
+
+  static String get syncStatus => "sync-status";
 }
