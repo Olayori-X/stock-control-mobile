@@ -15,6 +15,7 @@ import 'package:stock_control_app/features/outlets/presentation/routes.dart';
 import 'package:stock_control_app/features/route/presentation/pages/today_route_page.dart';
 import 'package:stock_control_app/features/route/presentation/routes.dart';
 import 'package:stock_control_app/features/sales/presentation/routes.dart';
+import 'package:stock_control_app/features/scs/pickup/presentation/routes.dart';
 import 'package:stock_control_app/features/sync_status/presentation/routes.dart';
 import 'package:stock_control_app/init.dart';
 import 'package:stock_control_app/features/auth/presentation/routes.dart';
@@ -63,6 +64,7 @@ class _StockControlAppState extends ConsumerState<StockControlApp> {
         ...outletFeatureRoutes,
         ...salesFeatureRoutes,
         ...syncStatusFeatureRoutes,
+        ...pickupRequestFeatureRoutes,
         GoRoute(
           path: Pages.home.path,
           builder: (context, state) => const TodayRoutePage(),

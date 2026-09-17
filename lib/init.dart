@@ -27,6 +27,16 @@ import 'package:stock_control_app/features/sales/domain/repositories/get_my_sale
 import 'package:stock_control_app/features/sales/domain/repositories/submit_sale_repository.dart';
 import 'package:stock_control_app/features/sales/domain/usecases/get_my_sales_use_case.dart';
 import 'package:stock_control_app/features/sales/domain/usecases/submit_sale_use_case.dart';
+import 'package:stock_control_app/features/scs/pickup/data/datasources/pickup_request_datasource.dart';
+import 'package:stock_control_app/features/scs/pickup/data/repositories/create_pickup_request_repository_impl.dart';
+import 'package:stock_control_app/features/scs/pickup/data/repositories/get_products_repository_impl.dart';
+import 'package:stock_control_app/features/scs/pickup/data/repositories/search_distributors_repository_impl.dart';
+import 'package:stock_control_app/features/scs/pickup/domain/repositories/create_pickup_request_repository.dart';
+import 'package:stock_control_app/features/scs/pickup/domain/repositories/get_products_repository.dart';
+import 'package:stock_control_app/features/scs/pickup/domain/repositories/search_distributors_repository.dart';
+import 'package:stock_control_app/features/scs/pickup/domain/usecases/create_pickup_request_use_case.dart';
+import 'package:stock_control_app/features/scs/pickup/domain/usecases/get_products_use_case.dart';
+import 'package:stock_control_app/features/scs/pickup/domain/usecases/search_distributors_use_case.dart';
 
 final GetIt serviceLocator = GetIt.I;
 
@@ -36,6 +46,7 @@ Future<void> initializeAllDependencies() async {
   initRouteDependencies();
   initOutletDependencies();
   initSaleDependencies();
+  initPickupDependencies();
 }
 
 // Everything registered here is a true cross-feature singleton — each
@@ -150,5 +161,36 @@ void initSaleDependencies() {
   serviceLocator.registerFactory<SyncHandler>(
     () => SaleSyncHandler(),
     instanceName: PendingActionType.sale.name,
+  );
+}
+
+
+void initPickupDependencies() {
+
+  //DATASOURCE
+  serviceLocator.registerFactory<PickupRequestDataSource>(
+    () => PickupRequestRemoteDataSource(),
+  );
+
+  //REPOSITORIES
+  serviceLocator.registerFactory<SearchDistributorsRepository>(
+    () => SearchDistributorsRepositoryImpl(dataSource: serviceLocator()),
+  );
+  serviceLocator.registerFactory<CreatePickupRequestRepository>(
+    () => CreatePickupRequestRepositoryImpl(dataSource: serviceLocator()),
+  );
+  serviceLocator.registerFactory<GetProductsRepository>(
+    () => GetProductsRepositoryImpl(dataSource: serviceLocator()),
+  );
+
+  //USECASES
+  serviceLocator.registerFactory(
+    () => SearchDistributorsUseCase(repository: serviceLocator()),
+  );
+  serviceLocator.registerFactory(
+    () => CreatePickupRequestUseCase(repository: serviceLocator()),
+  );
+  serviceLocator.registerFactory(
+    () => GetProductsUseCase(repository: serviceLocator()),
   );
 }

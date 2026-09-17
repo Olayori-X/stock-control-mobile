@@ -9,4 +9,6 @@ class Pages {
   static String get salesCapture => "sales-capture";
 
   static String get syncStatus => "sync-status";
+
+  static String get pickupRequest => "pickup-request";
 }
