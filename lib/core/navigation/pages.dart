@@ -11,4 +11,5 @@ class Pages {
   static String get syncStatus => "sync-status";
 
   static String get pickupRequest => "pickup-request";
+  static String get invoices => "invoices";
 }
