@@ -40,14 +40,16 @@ class SearchDistributorsResponse {
 class CreatePickupRequestPayload {
   final String distributorId;
   final List<Map<String, dynamic>> products;
+  final String? sessionId;
 
   const CreatePickupRequestPayload({
     required this.distributorId,
     required this.products,
+    this.sessionId,
   });
 
   Map<String, dynamic> toJson() {
-    return {"distributor_id": distributorId, "products": products};
+    return {"distributor_id": distributorId, "products": products, "sales_associate_id": sessionId};
   }
 }
 

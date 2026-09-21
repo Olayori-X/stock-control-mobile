@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:stock_control_app/core/extensions/string.dart';
+import 'package:stock_control_app/core/navigation/pages.dart';
 import 'package:stock_control_app/features/auth/presentation/provider/login_provider.dart';
 import 'package:stock_control_app/features/auth/presentation/functions/login.dart';
+import 'package:go_router/go_router.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -27,6 +30,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     final errorMessage = ref.watch(loginErrorMessageProvider);
     final resumptionFailed = ref.watch(resumptionFailedProvider);
     final isLoading = loginState == AppState.loading;
+
+    ref.listen<AppState>(loginStateProvider, (previous, next) {
+    if (next == AppState.success) {
+      context.go(Pages.home.path);
+    }
+  });
 
     return Scaffold(
       body: SafeArea(

@@ -1,4 +1,4 @@
-import 'package:isar/isar.dart';
+import 'package:isar_community/isar.dart';
 import 'package:get_it/get_it.dart';
 import 'package:stock_control_app/core/database/schemas/pending_action.dart';
 import 'package:stock_control_app/core/sync/pending_action_type.dart';

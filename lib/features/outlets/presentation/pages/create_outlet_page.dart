@@ -36,6 +36,17 @@ class _CreateOutletPageState extends ConsumerState<CreateOutletPage> {
     final result = ref.watch(createOutletResultProvider);
     final isLoading = state == AppState.loading;
 
+    ref.listen<AppState>(createOutletStateProvider, (previous, next) {
+      if (next == AppState.success) {
+        _nameController.clear();
+        _addressController.clear();
+        _typeController.clear();
+        _phoneController.clear();
+        _areaController.clear();
+        _zoneController.clear();
+      }
+    });
+
     return Scaffold(
       appBar: AppBar(title: const Text("New Outlet")),
       body: ListView(

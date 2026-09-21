@@ -1,5 +1,7 @@
+import 'package:get_it/get_it.dart';
 import 'package:stock_control_app/core/error/error.dart';
 import 'package:stock_control_app/core/error/handler.dart';
+import 'package:stock_control_app/core/network/session.dart';
 import 'package:stock_control_app/features/scs/pickup/data/datasources/pickup_request_datasource.dart';
 import 'package:stock_control_app/features/scs/pickup/data/models/pickup_request_model.dart';
 import 'package:stock_control_app/features/scs/pickup/domain/repositories/create_pickup_request_repository.dart';
@@ -15,9 +17,11 @@ class CreatePickupRequestRepositoryImpl implements CreatePickupRequestRepository
   Future<Either<PickupRequestResult, StockControlAppError>> create(
     CreatePickupRequestParams params,
   ) async {
+    final session = GetIt.I<SalesSession>();
     final payload = CreatePickupRequestPayload(
       distributorId: params.distributorId,
       products: params.products.map((p) => p.toJson()).toList(),
+      sessionId: session.userId,
     );
 
     try {
