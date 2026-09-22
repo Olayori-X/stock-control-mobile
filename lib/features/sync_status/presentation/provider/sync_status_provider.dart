@@ -3,14 +3,14 @@ import 'package:stock_control_app/core/provider/global.dart';
 import 'package:stock_control_app/core/database/schemas/pending_action.dart';
 export 'package:stock_control_app/core/provider/global.dart';
 
-final StateProvider<AppState> syncStatusStateProvider = StateProvider(
+final StateProvider<AppState> syncStatusStateProvider = StateProvider.autoDispose<AppState>(
   (ref) => AppState.initial,
 );
 
-final StateProvider<List<PendingAction>> pendingActionsProvider = StateProvider(
+final StateProvider<List<PendingAction>> pendingActionsProvider = StateProvider.autoDispose(
   (ref) => [],
 );
 
-final StateProvider<bool> manualSyncInProgressProvider = StateProvider(
+final StateProvider<bool> manualSyncInProgressProvider = StateProvider.autoDispose(
   (ref) => false,
 );

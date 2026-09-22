@@ -6,22 +6,10 @@ export 'package:stock_control_app/core/provider/global.dart';
 final userIdInputProvider = StateProvider<String>((ref) => '');
 final pinInputProvider = StateProvider<String>((ref) => '');
 
-final StateProvider<AppState> loginStateProvider = StateProvider(
-  (ref) => AppState.initial,
-);
+final loginStateProvider = StateProvider.autoDispose<AppState>((ref) => AppState.initial);
 
-final StateProvider<String> loginErrorMessageProvider = StateProvider(
-  (ref) => "",
-);
+final loginErrorMessageProvider = StateProvider.autoDispose<String>((ref) => "");
 
-final StateProvider<PinLoginResult?> loginResponseProvider = StateProvider(
-  (ref) => null,
-);
+final loginResponseProvider = StateProvider.autoDispose<PinLoginResult?>((ref) => null);
 
-// Distinct from the generic loginErrorMessageProvider so the UI can show
-// a dedicated "you're not near your planned route" state rather than a
-// generic error banner — the resumption check fails through the same
-// error path as everything else, but deserves clearer messaging.
-final StateProvider<bool> resumptionFailedProvider = StateProvider(
-  (ref) => false,
-);
+final resumptionFailedProvider = StateProvider.autoDispose<bool>((ref) => false);

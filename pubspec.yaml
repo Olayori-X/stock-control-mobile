@@ -66,6 +66,7 @@ dependencies:
   get_it:
   geolocator:
   go_router:
+  google_maps_flutter:
   google_places_flutter:
   google_sign_in:
 

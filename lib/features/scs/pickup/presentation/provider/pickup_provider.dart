@@ -11,14 +11,14 @@ final selectedDistributorProvider = StateProvider<DistributorResult?>((ref) => n
 
 final cartItemsProvider = StateProvider<Map<String, PickupProductItem>>((ref) => {});
 
-final StateProvider<AppState> createPickupStateProvider = StateProvider(
+final StateProvider<AppState> createPickupStateProvider = StateProvider.autoDispose<AppState>(
   (ref) => AppState.initial,
 );
 
-final StateProvider<String> createPickupErrorMessageProvider = StateProvider(
+final StateProvider<String> createPickupErrorMessageProvider = StateProvider.autoDispose(
   (ref) => "",
 );
 
-final StateProvider<PickupRequestResult?> createPickupResultProvider = StateProvider(
+final StateProvider<PickupRequestResult?> createPickupResultProvider = StateProvider.autoDispose(
   (ref) => null,
 );

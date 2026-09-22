@@ -3,10 +3,9 @@ import 'package:stock_control_app/core/provider/global.dart';
 import 'package:stock_control_app/features/scs/invoices/domain/repositories/invoices_repository.dart';
 export 'package:stock_control_app/core/provider/global.dart';
 
-final StateProvider<AppState> invoicesStateProvider = StateProvider((ref) => AppState.initial);
-final StateProvider<String> invoicesErrorMessageProvider = StateProvider((ref) => "");
-final StateProvider<List<InvoiceResult>> invoicesListProvider = StateProvider((ref) => []);
-
-final StateProvider<AppState> receiptsStateProvider = StateProvider((ref) => AppState.initial);
-final StateProvider<String> receiptsErrorMessageProvider = StateProvider((ref) => "");
-final StateProvider<List<ReceiptResult>> receiptsListProvider = StateProvider((ref) => []);
+final invoicesStateProvider = StateProvider.autoDispose<AppState>((ref) => AppState.initial);
+final invoicesErrorMessageProvider = StateProvider.autoDispose<String>((ref) => "");
+final invoicesListProvider = StateProvider.autoDispose<List<InvoiceResult>>((ref) => []);
+final receiptsStateProvider = StateProvider.autoDispose<AppState>((ref) => AppState.initial);
+final receiptsErrorMessageProvider = StateProvider.autoDispose<String>((ref) => "");
+final receiptsListProvider = StateProvider.autoDispose<List<ReceiptResult>>((ref) => []);

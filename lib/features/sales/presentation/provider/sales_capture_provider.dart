@@ -6,14 +6,6 @@ export 'package:stock_control_app/core/provider/global.dart';
 final skuInputProvider = StateProvider<String>((ref) => '');
 final quantityInputProvider = StateProvider<int>((ref) => 1);
 
-final StateProvider<AppState> submitSaleStateProvider = StateProvider(
-  (ref) => AppState.initial,
-);
-
-final StateProvider<String> submitSaleErrorMessageProvider = StateProvider(
-  (ref) => "",
-);
-
-final StateProvider<SubmitSaleResult?> submitSaleResultProvider = StateProvider(
-  (ref) => null,
-);
+final submitSaleStateProvider = StateProvider.autoDispose<AppState>((ref) => AppState.initial);
+final submitSaleErrorMessageProvider = StateProvider.autoDispose<String>((ref) => "");
+final submitSaleResultProvider = StateProvider.autoDispose<SubmitSaleResult?>((ref) => null);

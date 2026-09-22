@@ -3,14 +3,8 @@ import 'package:stock_control_app/core/provider/global.dart';
 import 'package:stock_control_app/features/route/domain/repositories/get_route_plan_repository.dart';
 export 'package:stock_control_app/core/provider/global.dart';
 
-final StateProvider<AppState> routeStateProvider = StateProvider(
-  (ref) => AppState.initial,
-);
+final routeStateProvider = StateProvider.autoDispose<AppState>((ref) => AppState.initial);
 
-final StateProvider<String> routeErrorMessageProvider = StateProvider(
-  (ref) => "",
-);
+final routeErrorMessageProvider = StateProvider.autoDispose<String>((ref) => "");
 
-final StateProvider<RoutePlanResult?> routePlanProvider = StateProvider(
-  (ref) => null,
-);
+final routePlanProvider = StateProvider.autoDispose<RoutePlanResult?>((ref) => null);
