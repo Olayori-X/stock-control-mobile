@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:stock_control_app/core/network/configuration.dart';
 import 'package:stock_control_app/features/scs/pickup/data/models/pickup_request_model.dart';
 
@@ -40,7 +42,12 @@ class PickupRequestRemoteDataSource implements PickupRequestDataSource {
   @override
   Future<List<MyPickupRequestResponse>> getMyPickupRequests() async {
     Response response = await dio.get("/sales/mypickuprequests");
-    final List<dynamic> data = response.data;
-    return data.map((r) => MyPickupRequestResponse.fromJson(r as Map<String, dynamic>)).toList();
+    final raw = response.data;
+    final List<dynamic> data =
+        raw is String ? jsonDecode(raw) as List<dynamic> : raw as List<dynamic>;
+
+    return data
+        .map((r) => MyPickupRequestResponse.fromJson(r as Map<String, dynamic>))
+        .toList();
+    }
   }
-}
