@@ -16,6 +16,7 @@ Future<void> _fetchInvoices(WidgetRef ref) async {
   response.fold(
     (l) {
       ref.watch(invoicesListProvider.notifier).state = l;
+      print("Invoices loaded: ${l.length}");
       ref.watch(invoicesStateProvider.notifier).state = AppState.success;
     },
     (r) {

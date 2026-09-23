@@ -83,3 +83,57 @@ class ProductResponse {
     return ProductResponse(sku: map["sku"] ?? "", name: map["name"] ?? "");
   }
 }
+
+// The backend's GetMyPickupRequests joins on distributor_id and scans
+// into a field literally named sales_associate_name (models.PendingPickupRequest
+// is reused across several endpoints with different join targets — same
+// quirk already documented for the unacceptedrequests/pendingrequests
+// pair on the web dashboard). Here, that field holds the distributor's
+// name, not the sales associate's — handled explicitly below rather than
+// left as a landmine for whoever reads this next.
+class ProductItemResponse {
+  final String sku;
+  final String name;
+  final int quantity;
+
+  const ProductItemResponse({required this.sku, required this.name, required this.quantity});
+
+  factory ProductItemResponse.fromJson(Map<String, dynamic> map) {
+    return ProductItemResponse(
+      sku: map["sku"] ?? "",
+      name: map["name"] ?? "",
+      quantity: map["quantity"] ?? 0,
+    );
+  }
+}
+
+class MyPickupRequestResponse {
+  final String requestId;
+  final String distributorId;
+  final String distributorName; // from the misleadingly-named sales_associate_name JSON field
+  final bool confirmed;
+  final List<ProductItemResponse> products;
+  final DateTime createdAt;
+
+  const MyPickupRequestResponse({
+    required this.requestId,
+    required this.distributorId,
+    required this.distributorName,
+    required this.confirmed,
+    required this.products,
+    required this.createdAt,
+  });
+
+  factory MyPickupRequestResponse.fromJson(Map<String, dynamic> map) {
+    return MyPickupRequestResponse(
+      requestId: map["request_id"] ?? "",
+      distributorId: map["distributor_id"] ?? "",
+      distributorName: map["sales_associate_name"] ?? "",
+      confirmed: map["confirmed"] ?? false,
+      products: ((map["products"] as List?) ?? [])
+          .map((p) => ProductItemResponse.fromJson(p as Map<String, dynamic>))
+          .toList(),
+      createdAt: DateTime.tryParse(map["created_at"] ?? "") ?? DateTime.now(),
+    );
+  }
+}

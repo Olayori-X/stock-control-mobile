@@ -5,6 +5,7 @@ abstract interface class PickupRequestDataSource {
   Future<SearchDistributorsResponse> searchDistributors(String query);
   Future<PickupRequestResponse> createPickupRequest(CreatePickupRequestPayload payload);
   Future<List<ProductResponse>> getProducts();
+  Future<List<MyPickupRequestResponse>> getMyPickupRequests();
 }
 
 class PickupRequestRemoteDataSource implements PickupRequestDataSource {
@@ -34,5 +35,12 @@ class PickupRequestRemoteDataSource implements PickupRequestDataSource {
     Response response = await dio.get("/sales/products");
     final List<dynamic> data = response.data;
     return data.map((p) => ProductResponse.fromJson(p as Map<String, dynamic>)).toList();
+  }
+
+  @override
+  Future<List<MyPickupRequestResponse>> getMyPickupRequests() async {
+    Response response = await dio.get("/sales/mypickuprequests");
+    final List<dynamic> data = response.data;
+    return data.map((r) => MyPickupRequestResponse.fromJson(r as Map<String, dynamic>)).toList();
   }
 }

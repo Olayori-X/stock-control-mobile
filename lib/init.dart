@@ -11,13 +11,17 @@ import 'package:stock_control_app/features/auth/domain/repositories/pin_login_re
 import 'package:stock_control_app/features/auth/domain/usecases/pin_login_use_case.dart';
 import 'package:stock_control_app/features/outlets/data/datasources/confirm_outlet_visit_datasource.dart';
 import 'package:stock_control_app/features/outlets/data/datasources/create_my_outlet_datasource.dart';
+import 'package:stock_control_app/features/outlets/data/datasources/get_my_outlets_datasource.dart';
 import 'package:stock_control_app/features/outlets/data/repositories/confirm_outlet_visit_repository_impl.dart';
 import 'package:stock_control_app/features/outlets/data/repositories/create_my_outlet_repository_impl.dart';
+import 'package:stock_control_app/features/outlets/data/repositories/get_my_outlets_repository_impl.dart';
 import 'package:stock_control_app/features/outlets/data/sync/outlet_visit_sync_handler.dart';
 import 'package:stock_control_app/features/outlets/domain/repositories/confirm_outlet_visit_repository.dart';
 import 'package:stock_control_app/features/outlets/domain/repositories/create_my_outlet_repository.dart';
+import 'package:stock_control_app/features/outlets/domain/repositories/get_my_outlets_repository.dart';
 import 'package:stock_control_app/features/outlets/domain/usecases/confirm_outlet_visit_use_case.dart';
 import 'package:stock_control_app/features/outlets/domain/usecases/create_my_outlet_use_case.dart';
+import 'package:stock_control_app/features/outlets/domain/usecases/get_my_outlets_use_case.dart';
 import 'package:stock_control_app/features/route/data/datasources/get_route_plan_datasource.dart';
 import 'package:stock_control_app/features/route/data/repositories/get_route_plan_repository_impl.dart';
 import 'package:stock_control_app/features/route/domain/repositories/get_route_plan_repository.dart';
@@ -38,12 +42,15 @@ import 'package:stock_control_app/features/scs/invoices/domain/usecases/get_my_i
 import 'package:stock_control_app/features/scs/invoices/domain/usecases/get_my_receipts_use_case.dart';
 import 'package:stock_control_app/features/scs/pickup/data/datasources/pickup_request_datasource.dart';
 import 'package:stock_control_app/features/scs/pickup/data/repositories/create_pickup_request_repository_impl.dart';
+import 'package:stock_control_app/features/scs/pickup/data/repositories/get_my_pickup_requests_repository_impl.dart';
 import 'package:stock_control_app/features/scs/pickup/data/repositories/get_products_repository_impl.dart';
 import 'package:stock_control_app/features/scs/pickup/data/repositories/search_distributors_repository_impl.dart';
 import 'package:stock_control_app/features/scs/pickup/domain/repositories/create_pickup_request_repository.dart';
+import 'package:stock_control_app/features/scs/pickup/domain/repositories/get_my_pickup_requests_repository.dart';
 import 'package:stock_control_app/features/scs/pickup/domain/repositories/get_products_repository.dart';
 import 'package:stock_control_app/features/scs/pickup/domain/repositories/search_distributors_repository.dart';
 import 'package:stock_control_app/features/scs/pickup/domain/usecases/create_pickup_request_use_case.dart';
+import 'package:stock_control_app/features/scs/pickup/domain/usecases/get_my_pickup_requests_use_case.dart';
 import 'package:stock_control_app/features/scs/pickup/domain/usecases/get_products_use_case.dart';
 import 'package:stock_control_app/features/scs/pickup/domain/usecases/search_distributors_use_case.dart';
 
@@ -56,6 +63,7 @@ Future<void> initializeAllDependencies() async {
   initOutletDependencies();
   initSaleDependencies();
   initPickupDependencies();
+  initInvoicesDependencies();
 }
 
 void initSharedDependencies() {
@@ -113,6 +121,10 @@ void initOutletDependencies() {
     () => CreateMyOutletRemoteDataSource(),
   );
 
+  serviceLocator.registerFactory<GetMyOutletsDataSource>(
+    () => GetMyOutletsRemoteDataSource(),
+  );
+
   //REPOSITORIES
   serviceLocator.registerFactory<ConfirmOutletVisitRepository>(
     () => ConfirmOutletVisitRepositoryImpl(
@@ -123,6 +135,10 @@ void initOutletDependencies() {
 
   serviceLocator.registerFactory<CreateMyOutletRepository>(
     () => CreateMyOutletRepositoryImpl(dataSource: serviceLocator()),
+  );
+
+  serviceLocator.registerFactory<GetMyOutletsRepository>(
+    () => GetMyOutletsRepositoryImpl(dataSource: serviceLocator()),
   );
 
   serviceLocator.registerFactory(
@@ -136,6 +152,10 @@ void initOutletDependencies() {
   serviceLocator.registerFactory<SyncHandler>(
     () => OutletVisitSyncHandler(),
     instanceName: PendingActionType.outletVisit.name,
+  );
+
+  serviceLocator.registerFactory(
+    () => GetMyOutletsUseCase(repository: serviceLocator()),
   );
 }
 
@@ -197,6 +217,9 @@ void initPickupDependencies() {
   serviceLocator.registerFactory<GetProductsRepository>(
     () => GetProductsRepositoryImpl(dataSource: serviceLocator()),
   );
+  serviceLocator.registerFactory<GetMyPickupRequestsRepository>(
+    () => GetMyPickupRequestsRepositoryImpl(dataSource: serviceLocator()),
+  );
 
   //USECASES
   serviceLocator.registerFactory(
@@ -207,6 +230,10 @@ void initPickupDependencies() {
   );
   serviceLocator.registerFactory(
     () => GetProductsUseCase(repository: serviceLocator()),
+  );
+
+  serviceLocator.registerFactory(
+    () => GetMyPickupRequestsUseCase(repository: serviceLocator()),
   );
 }
 

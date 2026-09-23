@@ -5,8 +5,10 @@ import 'package:stock_control_app/core/extensions/string.dart';
 import 'package:stock_control_app/core/navigation/pages.dart';
 import 'package:stock_control_app/core/network/session.dart';
 import 'package:stock_control_app/core/session/session_storage.dart';
+import 'package:stock_control_app/features/outlets/presentation/pages/my_outlets_page.dart';
 import 'package:stock_control_app/features/route/presentation/pages/today_route_page.dart';
 import 'package:stock_control_app/features/sales/presentation/pages/my_sales_page.dart';
+import 'package:stock_control_app/features/scs/pickup/presentation/pages/my_pickup_requests_page.dart';
 import 'package:stock_control_app/features/scs/pickup/presentation/pages/pickup_request_page.dart';
 import 'package:stock_control_app/features/scs/invoices/presentation/pages/invoices_page.dart';
 import 'package:stock_control_app/features/outlets/presentation/pages/create_outlet_page.dart';
@@ -75,6 +77,21 @@ class DashboardHomePage extends StatelessWidget {
             label: "Add Outlet",
             onTap: () => Navigator.of(context).push(
               MaterialPageRoute(builder: (_) => const CreateOutletPage()),
+            ),
+          ),
+
+          _DashboardTile(
+            icon: Icons.storefront,
+            label: "My Outlets",
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const MyOutletsPage()),
+            ),
+          ),
+          _DashboardTile(
+            icon: Icons.list_alt,
+            label: "My Requests",
+            onTap: () => Navigator.of(context).push(
+              MaterialPageRoute(builder: (_) => const MyPickupRequestsPage()),
             ),
           ),
         ],
