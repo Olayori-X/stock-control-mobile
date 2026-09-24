@@ -79,7 +79,7 @@ class _StockControlAppState extends ConsumerState<StockControlApp> {
   Widget build(BuildContext context) {
     return ScreenUtilInit(
       builder: (context, widget) => MaterialApp.router(
-        title: 'Stock Control',
+        title: 'RouteIQ',
         debugShowCheckedModeBanner: false,
         themeMode: ThemeMode.light,
         routerConfig: StockControlApp.router,
