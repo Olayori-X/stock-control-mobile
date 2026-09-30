@@ -11,16 +11,20 @@ import 'package:stock_control_app/features/auth/domain/repositories/pin_login_re
 import 'package:stock_control_app/features/auth/domain/usecases/pin_login_use_case.dart';
 import 'package:stock_control_app/features/outlets/data/datasources/confirm_outlet_visit_datasource.dart';
 import 'package:stock_control_app/features/outlets/data/datasources/create_my_outlet_datasource.dart';
+import 'package:stock_control_app/features/outlets/data/datasources/delete_my_outlet_datasource.dart';
 import 'package:stock_control_app/features/outlets/data/datasources/get_my_outlets_datasource.dart';
 import 'package:stock_control_app/features/outlets/data/repositories/confirm_outlet_visit_repository_impl.dart';
 import 'package:stock_control_app/features/outlets/data/repositories/create_my_outlet_repository_impl.dart';
+import 'package:stock_control_app/features/outlets/data/repositories/delete_my_outlet_repository_impl.dart';
 import 'package:stock_control_app/features/outlets/data/repositories/get_my_outlets_repository_impl.dart';
 import 'package:stock_control_app/features/outlets/data/sync/outlet_visit_sync_handler.dart';
 import 'package:stock_control_app/features/outlets/domain/repositories/confirm_outlet_visit_repository.dart';
 import 'package:stock_control_app/features/outlets/domain/repositories/create_my_outlet_repository.dart';
+import 'package:stock_control_app/features/outlets/domain/repositories/delete_my_outlet_repository.dart';
 import 'package:stock_control_app/features/outlets/domain/repositories/get_my_outlets_repository.dart';
 import 'package:stock_control_app/features/outlets/domain/usecases/confirm_outlet_visit_use_case.dart';
 import 'package:stock_control_app/features/outlets/domain/usecases/create_my_outlet_use_case.dart';
+import 'package:stock_control_app/features/outlets/domain/usecases/delete_my_outlet_use_case.dart';
 import 'package:stock_control_app/features/outlets/domain/usecases/get_my_outlets_use_case.dart';
 import 'package:stock_control_app/features/route/data/datasources/get_route_plan_datasource.dart';
 import 'package:stock_control_app/features/route/data/repositories/get_route_plan_repository_impl.dart';
@@ -125,6 +129,10 @@ void initOutletDependencies() {
     () => GetMyOutletsRemoteDataSource(),
   );
 
+  serviceLocator.registerFactory<DeleteMyOutletDataSource>(
+    () => DeleteMyOutletRemoteDataSource(),
+  );
+
   //REPOSITORIES
   serviceLocator.registerFactory<ConfirmOutletVisitRepository>(
     () => ConfirmOutletVisitRepositoryImpl(
@@ -139,6 +147,10 @@ void initOutletDependencies() {
 
   serviceLocator.registerFactory<GetMyOutletsRepository>(
     () => GetMyOutletsRepositoryImpl(dataSource: serviceLocator()),
+  );
+
+  serviceLocator.registerFactory<DeleteMyOutletRepository>(
+    () => DeleteMyOutletRepositoryImpl(dataSource: serviceLocator()),
   );
 
   serviceLocator.registerFactory(
@@ -156,6 +168,10 @@ void initOutletDependencies() {
 
   serviceLocator.registerFactory(
     () => GetMyOutletsUseCase(repository: serviceLocator()),
+  );
+
+  serviceLocator.registerFactory(
+    () => DeleteMyOutletUseCase(repository: serviceLocator()),
   );
 }
 
