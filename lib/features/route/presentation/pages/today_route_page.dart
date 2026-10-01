@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:stock_control_app/features/outlets/presentation/routes.dart';
 import 'package:stock_control_app/features/route/presentation/pages/route_map_page.dart';
 import 'package:stock_control_app/features/route/presentation/provider/route_provider.dart';
 import 'package:stock_control_app/features/route/presentation/functions/load_route.dart';
@@ -56,7 +57,7 @@ class _TodayRoutePageState extends ConsumerState<TodayRoutePage> {
                       subtitle: Text(stop.address),
                       onTap: () => context.push(
                         '/outlet-detail',
-                        extra: stop,
+                        extra: OutletDetailArgs(stop: stop, routeDay: plan.routeDay),
                       ),
                     ),
                   );
